@@ -1,0 +1,121 @@
+<!-- Loopple Templates: https://www.loopple.com/templates | Copyright Loopple (https://www.loopple.com) | This copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>summarise</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link href="https://demos.creative-tim.com/soft-ui-design-system/assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="https://demos.creative-tim.com/soft-ui-design-system/assets/css/nucleo-svg.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='loopple.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='own.css') }}"/>
+  </head>
+
+<body>
+    
+    <section class="my-10 py-4 position-relative overflow-hidden">
+    <!-- <section> -->
+    <!-- <img src="https://demos.creative-tim.com/soft-ui-design-system-pro/assets/img/shapes/waves-white.svg" alt="pattern-lines" class="position-absolute start-0 top-0 w-100 opacity-6"> -->
+        <div class="container position-relative z-index-2">
+            <div class="row">
+                <div class="col-lg-6 col-md-8 m-auto text-center">
+                    <h1 class="display-5 font-weight-bolder mb-4">arXiv articles in <span class="text-primary text-gradient">one </span>line</h1>
+                    <!-- <h2 class="mb-5">See Popular Courses</h2> -->
+                    <p class="mb-5 font-weight-normal text-black">
+                        get the general gist of an arXiv paper in one line
+                    </p>                    
+
+                    
+                    <div class="row">
+                      <form action="/" method="post" class="d-flex">
+                        <div class="col-sm-8 pe-sm-0 mb-sm-0 mb-2">
+                          <div class="input-group">
+                            <input class="form-control" placeholder="Enter search keyword..." type="text" name="keyword" required>
+                          </div>
+                        </div>
+                        <div class="col-sm-4 ps-sm-0">
+                          <button type="submit" class="btn bg-gradient-dark mb-0 ms-sm-3 me-auto h-100 w-100 d-block" value="Summarise">summarise</button>
+                        </div>
+                      </form>
+                    </div>
+                    
+
+                    <div class="row">
+                        {% if summary_info_dict %}
+                            {% for key in summary_info_dict %}
+                            <div class="summaries-box mt-5 p-3 bg-light rounded">
+                                <h2 class="h5 text-center mb-3">{{ key }}</h2>
+                                <!-- <p class="text-center mb-3">{{ summary_info_dict[key]["authors"] }}</p> -->
+                                <p class="text-center mb-3">{{ ", ".join(summary_info_dict[key]["authors"][:-1]) + (", and " if summary_info_dict[key]["authors"]|length > 1 else "") + summary_info_dict[key]["authors"][-1] }}</p>
+                                <p class="text-center mb-3">{{ summary_info_dict[key]["summary"] }}</p>
+                                <!-- <p class="text-center mb-3">Tags</p> -->
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="footer py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-8 mx-lg-auto text-lg-center">
+                    <p class="text-sm text-secondary">
+                        <!-- Copyright © 2022 &amp; A A Naseer -->
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://loopple.s3.eu-west-3.amazonaws.com/soft-ui-design-system/js/core/bootstrap.min.js" type="text/javascript"></script>
+    <script src="https://demos.creative-tim.com/soft-ui-design-system/assets/js/soft-design-system.min.js?v=1.0.5" type="text/javascript"></script>
+    <script src="https://demos.creative-tim.com/soft-ui-design-system-pro/assets/js/plugins/countup.min.js" type="text/javascript"></script>
+    <script src="https://demos.creative-tim.com/soft-ui-design-system-pro/assets/js/plugins/flatpickr.min.js"></script>
+    <script>
+        // Add CSS to style the summaries box
+
+        if (document.getElementById("state1")) {
+                    const countUp = new CountUp("state1", document.getElementById("state1").getAttribute("countTo"));
+                    if (!countUp.error) {
+                      countUp.start();
+                    } else {
+                      console.error(countUp.error);
+                    }
+                  }
+                  if (document.getElementById("state2")) {
+                    const countUp1 = new CountUp("state2", document.getElementById("state2").getAttribute("countTo"));
+                    if (!countUp1.error) {
+                      countUp1.start();
+                    } else {
+                      console.error(countUp1.error);
+                    }
+                  }
+                  if (document.getElementById("state3")) {
+                    const countUp2 = new CountUp("state3", document.getElementById("state3").getAttribute("countTo"));
+                    if (!countUp2.error) {
+                      countUp2.start();
+                    } else {
+                      console.error(countUp2.error);
+                    };
+                  }
+        
+         if (document.querySelector('.datepicker-1')) {
+              flatpickr('.datepicker-1', {
+              }); // flatpickr
+            } 
+        
+         if (document.querySelector('.datepicker-2')) {
+              flatpickr('.datepicker-2', {
+              }); // flatpickr
+            }
+    </script>
+</body>
+</html>

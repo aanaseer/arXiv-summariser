@@ -1,3 +1,0 @@
-- pip:                # everything under this, installed by pip
-  - cohere
-  - streamlit

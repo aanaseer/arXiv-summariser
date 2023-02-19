@@ -1,19 +1,11 @@
-import os
-
-# import openai
-from flask import Flask, redirect, render_template, request, url_for
-from collections import defaultdict
-
 import arxiv
 import cohere
 
 
-# api_key = "6YjoNayGiocXhyVjG9zGovJfdgbdDbrX8PZKmcxE"
-api_key = os.getenv("CO_KEY")
-# breakpoint()
+api_key = "6YjoNayGiocXhyVjG9zGovJfdgbdDbrX8PZKmcxE"
 co = cohere.Client(api_key)
 
-def generate_summary(abstract, temperature=0.2):
+def generate_summary(abstract, temperature=0.5):
     base_idea_prompt = """Passage: Is Wordle getting tougher to solve? Players seem to be convinced that the game has gotten harder in recent weeks ever since The New York Times bought it from developer Josh Wardle in late January. The Times has come forward and shared that this likely isn't the case. That said, the NYT did mess with the back end code a bit, removing some offensive and sexual language, as well as some obscure words There is a viral thread claiming that a confirmation bias was at play. One Twitter user went so far as to claim the game has gone to "the dusty section of the dictionary" to find its latest words.
                         TLDR: Wordle has not gotten more difficult to solve.
                         --
@@ -49,34 +41,19 @@ def get_arxiv_search_results(keyword, num_articles):
 
 
 def get_summary_and_misc_info(search_results, temperature):
-    summary_and_misc_info = defaultdict()
+    titles, authors, article_links, summaries = [], [], [], []
     for i, result in enumerate(search_results):
         title = result.title
         authors = [author.name for author in result.authors]
         article_link = result.pdf_url
-        cohere_summary = generate_summary(result.summary, temperature=temperature)
-        
-        summary_and_misc_info[title] = {
-            "authors": authors,
-            "article_link": article_link,
-            "summary": cohere_summary
-        }
-    
 
-    return summary_and_misc_info
+        summary = generate_summary(result.summary, temperature=temperature)
+        titles.append(title)
+        authors.append(authors)
+        article_links.append(article_link)
+        summaries.append(summary)
+
+    return titles, authors, article_links, summaries
 
 
-app = Flask(__name__)
-
-
-@app.route("/", methods=("GET", "POST"))
-def index():
-    if request.method == "POST":
-        keywords = request.form["keyword"]
-        arxiv_search_results = get_arxiv_search_results(keywords,10)
-        summary_info_dict = get_summary_and_misc_info(arxiv_search_results, 0.5)
-        return render_template("index.html", summary_info_dict=summary_info_dict)
-        
-    result = request.args.get("result")
-    return render_template("index.html", result=result)
 
