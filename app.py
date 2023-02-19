@@ -7,8 +7,6 @@ from collections import defaultdict
 import arxiv
 import cohere
 
-
-# api_key = "6YjoNayGiocXhyVjG9zGovJfdgbdDbrX8PZKmcxE"
 api_key = os.getenv("CO_KEY")
 # breakpoint()
 co = cohere.Client(api_key)
