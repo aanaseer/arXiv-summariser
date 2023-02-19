@@ -1,19 +1,8 @@
 # arXiv-summariser
 
-Work in progress.
+A side-project to experiment with the co:here API.
 
-Install all requirements
+It is currently a work in progress.
 
-    $ pip install -r requirements.txt
-
-Create a ``.env`` file and add the API key
-    
-    FLASK_APP=app
-    FLASK_ENV=development
-    OPENAI_API_KEY= "<insert key>"
-
-
-Run the app
-
-    $ flask run
+![](img/app.gif)
 
