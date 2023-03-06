@@ -1,17 +1,20 @@
-import os
+"""This is the main file for the app. It contains the Flask app and the functions that generate the summary and the arxiv search results."""
 
-# import openai
-from flask import Flask, redirect, render_template, request, url_for
-from collections import defaultdict
+import os
 
 import arxiv
 import cohere
 
+from collections import defaultdict
+
+from flask import Flask, render_template, request
+
+
 api_key = os.getenv("CO_KEY")
-# breakpoint()
 co = cohere.Client(api_key)
 
 def generate_summary(abstract, temperature=0.2):
+    """Returns a summary of the abstract."""
     base_idea_prompt = """Passage: Is Wordle getting tougher to solve? Players seem to be convinced that the game has gotten harder in recent weeks ever since The New York Times bought it from developer Josh Wardle in late January. The Times has come forward and shared that this likely isn't the case. That said, the NYT did mess with the back end code a bit, removing some offensive and sexual language, as well as some obscure words There is a viral thread claiming that a confirmation bias was at play. One Twitter user went so far as to claim the game has gone to "the dusty section of the dictionary" to find its latest words.
                         TLDR: Wordle has not gotten more difficult to solve.
                         --
@@ -37,6 +40,7 @@ def generate_summary(abstract, temperature=0.2):
 
 
 def get_arxiv_search_results(keyword, num_articles):
+    """Returns a list of arxiv search results."""
     search = arxiv.Search(
         query = keyword,
         max_results = num_articles,
@@ -47,6 +51,7 @@ def get_arxiv_search_results(keyword, num_articles):
 
 
 def get_summary_and_misc_info(search_results, temperature):
+    """Returns a dictionary with the title of the article as the key and a dictionary with the authors, article link, and summary as the value."""
     summary_and_misc_info = defaultdict()
     for i, result in enumerate(search_results):
         title = result.title
@@ -59,19 +64,15 @@ def get_summary_and_misc_info(search_results, temperature):
             "article_link": article_link,
             "summary": cohere_summary
         }
-    
-
     return summary_and_misc_info
 
-
 app = Flask(__name__)
-
 
 @app.route("/", methods=("GET", "POST"))
 def index():
     if request.method == "POST":
         keywords = request.form["keyword"]
-        arxiv_search_results = get_arxiv_search_results(keywords,10)
+        arxiv_search_results = get_arxiv_search_results(keywords,5)
         summary_info_dict = get_summary_and_misc_info(arxiv_search_results, 0.5)
         return render_template("index.html", summary_info_dict=summary_info_dict)
         
